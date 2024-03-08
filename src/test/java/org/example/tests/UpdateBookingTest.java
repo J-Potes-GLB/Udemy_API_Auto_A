@@ -18,7 +18,6 @@ public class UpdateBookingTest extends BaseTest {
         // Get bookingid of new booking
         int bookingid = response.jsonPath().getInt("bookingid");
 
-        // Get response
         // Create JSON body
         JSONObject body = new JSONObject();
         body.put("firstname", "PJ");
