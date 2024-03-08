@@ -1,18 +1,21 @@
 package org.example.tests;
 
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+import org.example.utils.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
-public class GetBookingTest {
+public class GetBookingTest extends BaseTest {
     @Test
     public void getBookingTest(){
         String id = "9";
 
         // Get response with id = 9
-        Response response = RestAssured.get("https://restful-booker.herokuapp.com/booking/" + id);
+        Response response = RestAssured.given(spec).get("/booking/" + id);
         response.print();
 
         // Verify response 200

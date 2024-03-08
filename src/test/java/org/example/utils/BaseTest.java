@@ -1,11 +1,22 @@
 package org.example.utils;
 
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.json.JSONObject;
+import org.testng.annotations.BeforeTest;
 
 public class BaseTest {
+    protected RequestSpecification spec;
+    @BeforeTest
+    public void setUp() {
+        spec = new RequestSpecBuilder().
+                setBaseUri("https://restful-booker.herokuapp.com").
+                build();
+    }
+
     protected Response createBooking() {
         // Create JSON body
         JSONObject body = new JSONObject();
@@ -21,12 +32,12 @@ public class BaseTest {
         body.put("additionalneeds", "Lunch");
 
         // Get response
-        Response response = RestAssured.given().contentType(ContentType.JSON).
-                body(body.toString()).post("https://restful-booker.herokuapp.com/booking");
+        Response response = RestAssured.given(spec).contentType(ContentType.JSON).
+                body(body.toString()).post("/booking");
         return response;
     }
 
     protected Response deleteBooking(int id, String[] credentials){
-        return RestAssured.given().auth().preemptive().basic(credentials[0], credentials[1]).delete("https://restful-booker.herokuapp.com/booking/" + id);
+        return RestAssured.given(spec).auth().preemptive().basic(credentials[0], credentials[1]).delete("/booking/" + id);
     }
 }
