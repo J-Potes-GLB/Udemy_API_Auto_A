@@ -22,5 +22,10 @@ public class DeleteBookingTest extends BaseTest {
         Response responseDeleted = deleteBooking(bookingid, credentials);
 
         Assert.assertEquals(responseDeleted.getStatusCode(), 201);
+
+        Response responseGet = RestAssured.get("https://restful-booker.herokuapp.com/booking/" + bookingid);
+        responseGet.print();
+
+        Assert.assertEquals(responseGet.getBody().asString(), "Not Found", "Body should be 'Not Found'");
     }
 }
