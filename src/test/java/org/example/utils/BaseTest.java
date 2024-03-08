@@ -25,4 +25,8 @@ public class BaseTest {
                 body(body.toString()).post("https://restful-booker.herokuapp.com/booking");
         return response;
     }
+
+    protected Response deleteBooking(int id, String[] credentials){
+        return RestAssured.given().auth().preemptive().basic(credentials[0], credentials[1]).delete("https://restful-booker.herokuapp.com/booking/" + id);
+    }
 }
