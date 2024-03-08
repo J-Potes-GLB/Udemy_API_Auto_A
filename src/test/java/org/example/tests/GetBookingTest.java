@@ -12,38 +12,39 @@ import org.testng.asserts.SoftAssert;
 public class GetBookingTest extends BaseTest {
     @Test
     public void getBookingTest(){
-        String id = "9";
+        // Create booking
+        Response responseOrig = createBooking();
+        responseOrig.print();
+
+        // Set path parameter
+        spec.pathParam("bookingId", responseOrig.jsonPath().getInt("bookingid"));
 
         // Get response with id = 9
-        Response response = RestAssured.given(spec).get("/booking/" + id);
+        Response response = RestAssured.given(spec).get("/booking/{bookingId}");
         response.print();
 
         // Verify response 200
         Assert.assertEquals(response.getStatusCode(), 200);
 
-        // Verify name and lastname widh Hard Assert
-//        Assert.assertEquals(response.jsonPath().get("firstname"), "Mary");
-//        Assert.assertEquals(response.jsonPath().get("lastname"), "Jones");
-
         // Verify fields with soft Assert
         SoftAssert softAssert = new SoftAssert();
         String actualFirstName = response.jsonPath().getString("firstname");
-        softAssert.assertEquals(actualFirstName, "Sally", "firstname in response is not expected.");
+        softAssert.assertEquals(actualFirstName, "JP", "firstname in response is not expected.");
 
         String actualLastName = response.jsonPath().getString("lastname");
-        softAssert.assertEquals(actualLastName, "Wilson", "lastname in response is not expected.");
+        softAssert.assertEquals(actualLastName, "Test", "lastname in response is not expected.");
 
         int actualPrice = response.jsonPath().getInt("totalprice");
-        softAssert.assertEquals(actualPrice, 231, "totalprice in response is not expected.");
+        softAssert.assertEquals(actualPrice, 100, "totalprice in response is not expected.");
 
         boolean actualDepositPaid = response.jsonPath().getBoolean("depositpaid");
         softAssert.assertFalse(actualDepositPaid, "depositpaid should be false, but it's not.");
 
         String actualCheckin = response.jsonPath().getString("bookingdates.checkin");
-        softAssert.assertEquals(actualCheckin, "2019-06-08");
+        softAssert.assertEquals(actualCheckin, "2023-12-12");
 
         String actualCheckout = response.jsonPath().getString("bookingdates.checkout");
-        softAssert.assertEquals(actualCheckout, "2020-01-03");
+        softAssert.assertEquals(actualCheckout, "2023-12-20");
 
         softAssert.assertAll();
     }
